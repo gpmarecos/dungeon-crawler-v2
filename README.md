@@ -15,4 +15,6 @@
     - Dagger
     - Bow
 - Magic Stones
+
+## Future
 - Potential for more.
