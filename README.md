@@ -6,7 +6,6 @@
         - Archetype Class
     - Inventory Class
         - Item Class
-    - Map Class ?
 
 ## Inventory
 - Weapon
@@ -15,6 +14,8 @@
     - Dagger
     - Bow
 - Magic Stones
+    - Required to beat the final boss
+
 
 ## Future
 - Potential for more.
