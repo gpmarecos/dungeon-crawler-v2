@@ -1,17 +1,12 @@
 # A poor man's Dungeons & Dragons
+from start import start
 
-print("Haunted Dungeon")
-print("The goal of this game is to claim the pile of gold somewhere in the dungeon.")
-print("However, there are monsters in the dungeon who can only be defeated with ")
-print("your sword and there is a Boss Monster who solely protects the gold.")
-print("He can only be defeated with a sword AND the magic stones. ")
-print("Type help as your first command to learn what other commands do.  Good luck!")
-print()
+name, playerclass, weapon = start()
 
 # Describe the Map of the dungeon N.B. 3 floors, 5 rooms
 floor_3 = ["empty", "empty", "up stairs", "boss monster", "pile of gold"]
-floor_2 = ["sword", "up stairs", "monster", "down stairs", "sword"]
-floor_1 = ["map", "sword", "down stairs", "monster", "magic stones"]
+floor_2 = [weapon, "up stairs", "monster", "down stairs", weapon]
+floor_1 = ["map", weapon, "down stairs", "monster", "magic stones"]
 roomnum = 0
 currentfloor = 1
 inventory = []
@@ -54,8 +49,9 @@ while gameState == "ongoing":
     elif room == "map":
         print("There's a map on the floor..")
 
-    elif room == "sword":
-        print("There's a sword in the room.")
+    elif room == weapon:
+        print("There's a " + weapon + " in the room.")
+        
 
     elif room == "magic stones":
         print("There are magic stones on the floor.")
@@ -165,7 +161,7 @@ while gameState == "ongoing":
             or room == "boss monster"
         ):
             print("You scavenge the room but find nothing to grab")
-        if room == "sword" or room == "magic stones" or room == "map":
+        if room == weapon or room == "magic stones" or room == "map":
             inventory.append(room)
             print("You picked up the " + room + " and added it to your inventory.")
             if currentfloor == 1:
