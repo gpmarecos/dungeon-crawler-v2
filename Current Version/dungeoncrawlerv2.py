@@ -1,6 +1,8 @@
 # A poor man's Dungeons & Dragons
 from start import start
 
+from choice import get_user_choice
+
 name, playerclass, weapon = start()
 
 # Describe the Map of the dungeon N.B. 3 floors, 5 rooms
@@ -10,7 +12,7 @@ floor_1 = ["map", weapon, "down stairs", "monster", "magic stones"]
 roomnum = 0
 currentfloor = 1
 inventory = []
-swordtemp = False
+weapontemp = False
 stonetemp = False
 removaltemp = False
 
@@ -70,152 +72,10 @@ while gameState == "ongoing":
 
     elif room == "pile of gold":
         print ("You've found a pile of gold, and all you need to do is grab it.")
-
-    # Get command from the player
-    choice = input("Command? ")
-
-    # Respond to command
-    if choice == "help":
-        print("The following is a list of commands to find the pile of gold.")
-        print()
-        print(
-            "   inventory:  You will show you whether you have a sword and magic stones to fight monsters."
-        )
-        print()
-        print(
-            "   left:  You will move left one room.  If you are in the leftmost room on your current floor, you will be warned that you cannot move left."
-        )
-        print()
-        print(
-            "   right:  You will move right one room.  If you are in the rightmost room on your current floor, you will be warned that you cannot move right."
-        )
-        print()
-        print(
-            "   up:  If there are up stairs in your current room, you will move up 1 floor to the room directly above your current room.  If there are no up stairs in your room, you will be warned that you cannot move up."
-        )
-        print()
-        print(
-            "   down: If there are down stairs in your current room, you will move down 1 floor to the room directly below your current room.  If there are no down stairs in your room, you will be warned that you cannot move down."
-        )
-        print()
-        print(
-            "   grab:  If there is a sword, magic stones or the pile of gold, you can take those items."
-        )
-        print()
-        print(
-            "   fight:  If you encounter a monster or Boss monster, you can fight them but make sure you have a sword; in addition, you will need magic stones and a sword to defeat the Boss Monster."
-        )
-        print()
-
-    elif choice == "inventory":
-        print(inventory)
-
-    elif choice == "map":
-        for i in range(len(inventory)):
-            if inventory[i] == "map":
-                print()
-                print(floor_3)
-                print(floor_2)
-                print(floor_1)
-                print()
-        
-
-    elif choice == "left":
-        if roomnum != 0:
-            roomnum -= 1
-        else:
-            print("You try to go left but hit your face into the wall.")
-
-    elif choice == "right":
-        if roomnum != 4:
-            roomnum += 1
-        else:
-            print("You try to go right but hit your face into the wall.")
-
-    elif choice == "up":
-        if room == "up stairs":
-            currentfloor -= 1
-            if currentfloor == 2:
-                roomnum = floor_2.index("up stairs")
-            else:
-                roomnum = floor_1.index("up stairs")
-        else:
-            print("There are no stairs to go up.")
-
-    elif choice == "down":
-        if room == "down stairs":
-            currentfloor += 1
-            if currentfloor == 2:
-                roomnum = floor_2.index("up stairs")
-            else:
-                roomnum = floor_3.index("up stairs")
-        else:
-            print("There are no stairs to go down.")
-
-    elif choice == "grab":
-        if (
-            room == "empty"
-            or room == "up stairs"
-            or room == "down stairs"
-            or room == "monster"
-            or room == "boss monster"
-        ):
-            print("You scavenge the room but find nothing to grab")
-        if room == weapon or room == "magic stones" or room == "map":
-            inventory.append(room)
-            print("You picked up the " + room + " and added it to your inventory.")
-            if currentfloor == 1:
-                floor_1[roomnum] = "empty"
-            elif currentfloor == 2:
-                floor_2[roomnum] = "empty"
-            else:
-                floor_3[roomnum] = "empty"
-        elif room == "pile of gold":
-            inventory.append(room)
-            print()
-            print("You picked up the pile of gold and and flee from the witches dungeon, gratious for your life.")
-            gameState = "won"
-
-    elif choice == "fight":
-        if room != "monster" or room != "boss monster":
-            print("There is nothing here to fight")
-        if room == "monster":
-            for i in range(len(inventory)):
-                if inventory[i] == "sword":
-                    print(
-                        "You defeated the monster, but lost your sword during the fight."
-                    )
-                    removaltemp = True
-                    inventory.remove("sword")
-            if removaltemp == True:
-                if currentfloor == 1:
-                    floor_1[roomnum] = "empty"
-                elif currentfloor == 2:
-                    floor_2[roomnum] = "empty"
-                else:
-                    floor_3[roomnum] = "empty"
-            else:
-                gamestate = "lost"
-        if room == "boss monster":
-            for i in range(len(inventory)):
-                if inventory[i] == "sword":
-                    swordtemp = True
-                if inventory[i] == "magic stones":
-                    stonetemp = True
-            if stonetemp == True and swordtemp == True:
-                print(
-                    "You fought the boss monster and defeated it, unlocking the door behind it, but breaking your sword and the magic stones."
-                )
-                inventory.remove("sword")
-                inventory.remove("magic stones")
-                floor_3[3] = "empty"
-            else:
-                gameState = "lost"
-
-    else:
-        print('Command not recognized. Type "help" to see all commands.')
-
+    
+    room, inventory, floor_1, floor_2, floor_3, roomnum, currentfloor, weapon, weapontemp, stonetemp, removaltemp, gameState = get_user_choice(room, inventory, floor_1, floor_2, floor_3, roomnum, currentfloor, weapon, weapontemp, stonetemp, removaltemp, gameState)
+    
 if gameState == "won":
-    print("Congratulations!  You found the gold and won the game! ")
+    print("Congratulations!  You found the gold, escaped, and won the game! ")
 elif gameState == "lost":
     print("Sorry, you were killed by the monsters.  Try again!!")
